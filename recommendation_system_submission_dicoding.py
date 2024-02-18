@@ -22,6 +22,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+import re
 # Filter out specific warning by category
 warnings.filterwarnings("ignore")
 # Your code here that triggers the warning
@@ -42,8 +43,6 @@ ratings_df.head()
 print('Jumlah data movies: ', len(movies_df.movieId.unique()))
 print('Jumlah data ratings: ', len(ratings_df.movieId.unique()))
 
-"""### Exploratory Data Analysis"""
-
 movies_df.info()
 
 ratings_df.info()
@@ -51,6 +50,11 @@ ratings_df.info()
 movies_df.describe(include="all")
 
 ratings_df.describe(include="all")
+
+"""### Exploratory Data Analysis
+
+**Univariate Analysis**
+"""
 
 categorical_feats = ['rating']
 count_categorical_cols = len(categorical_feats)
@@ -74,7 +78,171 @@ for ax in axes[count_categorical_cols:]:
 plt.tight_layout()
 plt.show()
 
-"""## Data Preprocessing
+movie_id = []
+movies = []
+genres = []
+# Iterate over the rows
+for index, row in movies_df.iterrows():
+    # Split the string by "|"
+    split_result = row["genres"].split("|")
+    for i in split_result:
+      movie_id.append(row["movieId"])
+      movies.append(row["title"])
+      genres.append(i)
+genres = {
+    "movieId":movie_id,
+    "title":movies,
+    "genre":genres
+}
+
+genres_df = pd.DataFrame(genres)
+genres_df.head()
+
+genres_df["genre"].value_counts().plot(kind="bar")
+plt.xlabel("Genre")
+plt.ylabel("Count")
+plt.title("Distribution of Genres")
+plt.show()
+
+movie_id = []
+movies = []
+years=[]
+# Iterate over the rows
+for index, row in movies_df.iterrows():
+  # Use regular expression to find the year in parentheses
+  year_match = re.search(r'\((\d{4})\)', row["title"])
+  # Extract the year if found
+  if year_match:
+        year = year_match.group(1)
+        years.append(year)
+  else:
+    continue
+  movie_id.append(row["movieId"])
+  movies.append(row["title"])
+years_df = {
+    "movieId":movie_id,
+    "title":movies,
+    "year":years
+}
+
+years_df = pd.DataFrame(years_df)
+years_df.head()
+
+years_df["year"].value_counts().head(10).plot(kind="bar")
+plt.xlabel("year")
+plt.ylabel("Count")
+plt.title("Top 10 years with the most movie publications")
+plt.show()
+
+"""**Multivariate Analysis**"""
+
+# genre and ratings
+# menggabungkan data movies dengan rating
+genre_ratings = pd.merge(genres_df, ratings_df, on='movieId', how='inner')
+
+# Print dataframe movies
+genre_ratings.head()
+
+# Calculate the top 5 genres by count
+top_genres = genre_ratings[genre_ratings["rating"] == 5.0]['genre'].value_counts().nlargest(5).index.tolist()
+
+# Filter the DataFrame to include only the top 5 genres
+genre_ratings_top5 = genre_ratings[(genre_ratings['genre'].isin(top_genres)) & (genre_ratings["rating"] == 5.0)]
+# Calculate the count of each genre
+genre_counts = genre_ratings_top5['genre'].value_counts()
+
+# Sort the genres by count
+genre_ratings_top5_sorted = genre_counts.sort_values(ascending=False).reset_index()
+
+# Rename the columns
+genre_ratings_top5_sorted.columns = ['genre', 'count']
+
+
+# Create a bar plot
+sns.barplot(x='genre', y='count', data=genre_ratings_top5_sorted)
+plt.title('Count of Ratings by Genre (Top 5)')
+plt.xlabel('Genre')
+plt.ylabel('Count')
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+plt.show()
+
+# Calculate the top 5 genres by count
+top_genres = genre_ratings[genre_ratings["rating"] == 0.5]['genre'].value_counts().nlargest(5).index.tolist()
+
+# Filter the DataFrame to include only the top 5 genres
+genre_ratings_top5 = genre_ratings[(genre_ratings['genre'].isin(top_genres)) & (genre_ratings["rating"] == 0.5)]
+# Calculate the count of each genre
+genre_counts = genre_ratings_top5['genre'].value_counts()
+
+# Sort the genres by count
+genre_ratings_top5_sorted = genre_counts.sort_values(ascending=False).reset_index()
+
+# Rename the columns
+genre_ratings_top5_sorted.columns = ['genre', 'count']
+
+
+# Create a bar plot
+sns.barplot(x='genre', y='count', data=genre_ratings_top5_sorted)
+plt.title('Count of Ratings by Genre (Top 5)')
+plt.xlabel('Genre')
+plt.ylabel('Count')
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+plt.show()
+
+# genre and ratings
+# menggabungkan data movies dengan rating
+year_ratings = pd.merge(years_df, ratings_df, on='movieId', how='inner')
+
+# Print dataframe movies
+year_ratings.head()
+
+# Calculate the top 5 years by count
+top_years = year_ratings[year_ratings["rating"] == 5.0]['year'].value_counts().nlargest(5).index.tolist()
+
+# Filter the DataFrame to include only the top 5 years
+years_top5 = year_ratings[(year_ratings['year'].isin(top_years)) & (year_ratings["rating"] == 5.0)]
+# Calculate the count of each year
+year_counts = years_top5['year'].value_counts()
+
+# Sort the years by count
+years_top5_sorted = year_counts.sort_values(ascending=False).reset_index()
+
+# Rename the columns
+years_top5_sorted.columns = ['year', 'count']
+
+
+# Create a bar plot
+sns.barplot(x='year', y='count', data=years_top5_sorted)
+plt.title('Count of Ratings by Year (Top 5)')
+plt.xlabel('year')
+plt.ylabel('Count')
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+plt.show()
+
+# Calculate the top 5 years by count
+top_years = year_ratings[year_ratings["rating"] == 0.5]['year'].value_counts().nlargest(5).index.tolist()
+
+# Filter the DataFrame to include only the top 5 years
+years_top5 = year_ratings[(year_ratings['year'].isin(top_years)) & (year_ratings["rating"] == 0.5)]
+# Calculate the count of each year
+year_counts = years_top5['year'].value_counts()
+
+# Sort the years by count
+years_top5_sorted = year_counts.sort_values(ascending=False).reset_index()
+
+# Rename the columns
+years_top5_sorted.columns = ['year', 'count']
+
+
+# Create a bar plot
+sns.barplot(x='year', y='count', data=years_top5_sorted)
+plt.title('Count of Ratings by Year (Top 5)')
+plt.xlabel('year')
+plt.ylabel('Count')
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+plt.show()
+
+"""## Data Preparation
 
 ### Merge Data
 """
@@ -87,18 +255,15 @@ movies.head()
 
 print('Jumlah seluruh data movies dan rating berdasarkan movie_id: ', len(movies))
 
-"""## Data Preparation
-
-### Change Datatype
-"""
-
-movies['movieId'] = movies['movieId'].astype('category')
-movies['userId'] = movies['userId'].astype('category')
-
 """### Missing Value"""
 
 movies.isna().sum().plot(kind="bar")
 plt.title("Count of missing value")
+
+"""### Change Datatype"""
+
+movies['movieId'] = movies['movieId'].astype('category')
+movies['userId'] = movies['userId'].astype('category')
 
 # Membuang data duplikat pada variabel preparation
 preparation = movies.drop_duplicates('movieId')
@@ -211,9 +376,19 @@ def movie_recommendation(title, similarity_data=cosine_sim_df, items=data[['titl
     return pd.DataFrame(closest).merge(items).head(k)
 
 data[data.title.eq('Old Boy (2003)')]
+actual = data[data.title.eq('Old Boy (2003)')]
 
 # Mendapatkan rekomendasi movie yang mirip dengan Old Boy (2003)
 movie_recommendation('Old Boy (2003)')
+
+predict = movie_recommendation('Old Boy (2003)')
+
+actual["genres"].values
+
+total_relevant = predict[predict["genres"].isin(actual["genres"].values)]["genres"].value_counts().values[0]
+total_recommendation = len(predict)
+precision = (total_relevant/total_recommendation)*100
+print(precision)
 
 """### Modelling Collaborative Based Filtering"""
 
