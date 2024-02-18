@@ -33,8 +33,8 @@ Tujuan pada penelitian ini sebagai berikut:
 
 ## Data Understanding
 Dataset yang digunakan untuk proyek ini diperoleh dari situs kaggle yang dapat diunduh melalui [Kaggle](https://www.kaggle.com/datasets/nicoletacilibiu/movies-and-ratings-for-recommendation-system). berikut detail dari dataset yang digunakan:
-### Exploratory Data Analysis
-- Movies
+1. Movies Dataset
+Movies dataset merupakan dataset yang berisi judul film dan genre. berikut struktur dari movies dataset
 
     | Feature  | type | Row |
     | ------------- | ------------- |------------- |
@@ -42,36 +42,76 @@ Dataset yang digunakan untuk proyek ini diperoleh dari situs kaggle yang dapat d
     | title  | object  | 9742  |
      | genres  | object  | 9742  |
      
-- Ratings
-
+2. Ratings
+Ratings dataset merupakan dataset yang berisi user, ratings dan movieId. berikut struktur dari Ratings dataset
     | Feature  | type | Row |
     | ------------- | ------------- |------------- |
     | movieId  | int  | 100836  |
     | userId  | int  | 100836  |
      | rating  | float  | 100836  |
      | timestamp  | int  | 100836  |
-#### Distribution Data
+### Exploratory Data Analysis
 
-![Distribution data](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/distribution%20rating.png?raw=true)
+#### Univariate Analysis
+**Ratings**
+![Distribution ratings data](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/distribution%20rating.png?raw=true)
 
-Gambar 1. Distribution data
+Gambar 1. Distribution ratings data
 
 Berdasarkan gambar 1. nilai ratings maksimum pada 4.5 dan minimum 0.5, rating yang diberikan user paling banyak pada 4.0 melebihi 25000 data sedangkan 1, 1.5 dan 0.5 tidak melebihi 5000 data.
 
-#### Missing Value
+**Genres**
+![Distribution genres data](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/distribution%20genre.png?raw=true)
 
-![Missing Value](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/missing_value.png?raw=true)
+Gambar 2. Distribution genres data
+Berdasarkan gambar 2. Drama memiliki jumlah data paling banyak dari genre lain sedangkan film-noir dan genres lainnya memiliki jumlah data sedikit. Maka dari itu, genre drama menjadi  film paling banyak.
 
-Gambar 2. Missing Value
+**Years**
+![Distribution years data](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/distribution%20year.png?raw=true)
 
-Berdasarkan gambar 2. tidak terdapat missing value dari keseluruhan data, maka dari itu dataset siap digunakan untuk development recommendation system.
+Gambar 3. Distribution Years data
+Berdasarkan gambar 3. tahun 2002 memiliki jumlah data paling banyak dari tahun lain sedangkan 1996 tahun lainnya memiliki jumlah data sedikit. Maka dari itu, tahun 2002 menjadi tahun dengan publikasi film paling banyak.
+
+#### Multivariate Analysis
+**Ratings and Genres**
+![Count of ratings 5.0 by genre](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/Count%20of%20rating%20by%20Genre%205.0%20rating.png?raw=true)
+
+Gambar 4. Count of ratings 5.0 by genre
+
+Berdasarkan gambar 4. Drama memiliki ratings tinggi paling banyak dan adventure memiliki ratings tinggi dengan jumlah dari top 5 lainnya. Maka dari itu, penonton lebih tertarik dengan film dengan genre drama.
+
+![Count of ratings 0.5 by genre](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/Count%20of%20rating%20by%20Genre%200.5%20rating.png?raw=true)
+
+Gambar 5. Count of ratings 0.5 by genre
+
+Berdasarkan gambar 5. Comedy memiliki ratings rendah paling banyak dan adventure memiliki ratings rendah dengan jumlah dari top 5 lainnya. Maka dari itu, penonton tidak tertarik dengan film dengan genre comedy.
+
+**Ratings and Years**
+![Count of ratings 5.0 by year](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/Count%20of%20rating%20by%20Year5.0%20rating.png?raw=true)
+
+Gambar 6. Count of ratings 5.0 by year
+
+Berdasarkan gambar 6. Tahun 1994 memiliki ratings tinggi paling banyak dan adventure memiliki ratings tinggi dengan jumlah dari top 5 lainnya. Maka dari itu, penonton lebih tertarik dengan film dengan genre drama.
+
+![Count of ratings 0.5 by year](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/Count%20of%20rating%20by%20year%200.5%20rating.png?raw=true)
+
+Gambar 7. Count of ratings 0.5 by year
+
+Berdasarkan gambar 7. Tahun 2001 memiliki ratings rendah paling banyak dan tahun 2003 memiliki ratings rendah dengan jumlah dari top 5 lainnya. Maka dari itu, penonton tidak tertarik dengan film pada tahun 2001..
 
 ## Data Preparation
 setelah data understanding, selanjutnya data preparation. Pada bagian ini dilakukan beberapa penerapan untuk mempersiapkan data. beberapa tahap seperti merge data dan change data type. berikut penerapannya:
 
 1. Merge Data
 Tahap Pertama yang dilakukan yaitu merge data. Proses penggabungan atau "merge" data dalam tahap persiapan data adalah langkah penting dalam mempersiapkan data untuk analisis lebih lanjut. Dalam konteks pengembangan sistem rekomendasi film, proses ini dapat melibatkan menggabungkan beberapa  data yang berisi informasi tentang pengguna, film, dan rating.  Dengan menggabungkan kedua set data antara movie dan ratings berdasarkan kolom yang sama yaitu movieId, Proses penggabungan data ini dapat dilakukan dengan menggunakan perangkat lunak analisis data seperti Python dengan library pandas, menggunakan fungsi merge untuk menggabungkan data berdasarkan kolom tertentu. Setelah data digabungkan, langkah-langkah selanjutnya dalam analisis data, seperti membangun model rekomendasi berbasis konten menggunakan teknik content-based filtering.
-2. Change Data Type
+2. Missing Value
+
+    ![Missing Value](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/missing_value.png?raw=true)
+    
+    Gambar 8. Missing Value
+    
+    Berdasarkan gambar 8. tidak terdapat missing value dari keseluruhan data, maka dari itu dataset siap digunakan untuk development recommendation system.
+3. Change Data Type
 Setelah tahap merge data, selanjutnya tahap change data type. ada 1 feature yang memiliki tipe data ordinal yaitu rating.Perubahan tipe data dari "object" ke "category" adalah proses yang melibatkan konversi nilai-nilai kategori dalam kolom menjadi nilai numerik yang mewakili tingkat ordinal.Feature rating merupakan data kategori yang memiliki tingkatan atau urutan tertentu yang dapat diurutkan, maka dari itu perlu dilakukan perubahan tipe menjadi category.
 
 ## Modeling
@@ -79,10 +119,13 @@ Setelah tahap Data Preparation, selanjutnya tahap modelling. Modelling memiliki 
 ### Content-based filtering
 Dalam konteks sistem rekomendasi film, misalnya, content-based filtering akan menganalisis atribut-atribut film seperti genre untuk merekomendasikan film yang memiliki karakteristik serupa dengan film yang disukai pengguna. Kelebihan dari content-based filtering termasuk kemampuannya untuk memberikan rekomendasi yang personalisasi sesuai dengan preferensi pengguna, tidak memerlukan data eksternal seperti peringkat pengguna lainnya, dan dapat menangani item baru dengan baik. Namun, metode ini juga memiliki kelemahan, seperti cenderung memberikan rekomendasi yang terlalu mirip dengan item yang sudah disukai pengguna, kesulitan dalam memberikan rekomendasi untuk pengguna atau item baru, dan keterbatasan dalam menangkap preferensi pengguna yang kompleks. Oleh karena itu, dalam praktiknya, kombinasi dari beberapa metode rekomendasi sering digunakan untuk memberikan rekomendasi yang lebih baik secara keseluruhan. Penerapan algoritma ini memiliki beberapa tahapan yaitu vektorisasi dan _cosine similiarity_. Berikut penerapan tahapannya:
 1. Vektorisasi
+tahap pertama dari modelling yaitu vektorisasi. Vektorisasi adalah proses mengubah teks menjadi representasi vektor numerik, yang dapat diproses oleh algoritma machine learning atau model statistik.
+![tf-idf Formula](https://miro.medium.com/v2/resize:fit:1400/1*LfW66-WsYkFqWc4XYJbEJg.png)
+Gambar 9. tf-idf Formula
 2. Cosine Similiarity
 Cosine similarity adalah metrik yang digunakan untuk mengukur seberapa mirip dua vektor non-nol dalam ruang berdimensi banyak. Dalam konteks sistem rekomendasi, cosine similarity sering digunakan untuk membandingkan kesamaan antara dua item atau dua pengguna berdasarkan preferensi mereka terhadap item. Untuk menghitung cosine similarity antara dua vektor, berikut adalah rumus cosine similarity:
-![Cosine Similarity Formula](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/distribution%20rating.png?raw=true)
-Gambar 3. Cosine Similarity Formula
+![Cosine Similarity Formula](https://miro.medium.com/v2/resize:fit:1400/1*LfW66-WsYkFqWc4XYJbEJg.png)
+Gambar 10. Cosine Similarity Formula
 Setelah mendapatkan cosine similarity, berikut adalah sample data hasil cosine similarity.
     | Title  | Stage Beauty (2004) | The Expendables 3 (2014)  |Love at First Bite (1979)	|
     | -------- | ---- |----- |------|
