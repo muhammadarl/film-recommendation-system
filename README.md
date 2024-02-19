@@ -26,6 +26,7 @@ Tujuan pada penelitian ini sebagai berikut:
 - Menghasilkan sejumlah rekomendasi berdasarkan film yang sedang dilihat pengguna.
 - Menghasilkan sejumlah rekomendasi film yang sesuai dengan preferensi pengguna dan belum pernah ditonton sebelumnya.
 - Memiliki model RMSE(Root Mean Square Error) pada validation kurang dari 0.25
+- Memiliki Model Precision pada content-based filtering melebihi 90%.
 
 ### Solution statements
 - Penggunaan Content-based Filtering untuk menghasilkan rekomendasi berdasarkan film yang sedang dilihat pengguna
@@ -119,8 +120,12 @@ Setelah tahap Data Preparation, selanjutnya tahap modelling. Modelling memiliki 
 ### Content-based filtering
 Dalam konteks sistem rekomendasi film, misalnya, content-based filtering akan menganalisis atribut-atribut film seperti genre untuk merekomendasikan film yang memiliki karakteristik serupa dengan film yang disukai pengguna. Kelebihan dari content-based filtering termasuk kemampuannya untuk memberikan rekomendasi yang personalisasi sesuai dengan preferensi pengguna, tidak memerlukan data eksternal seperti peringkat pengguna lainnya, dan dapat menangani item baru dengan baik. Namun, metode ini juga memiliki kelemahan, seperti cenderung memberikan rekomendasi yang terlalu mirip dengan item yang sudah disukai pengguna, kesulitan dalam memberikan rekomendasi untuk pengguna atau item baru, dan keterbatasan dalam menangkap preferensi pengguna yang kompleks. Oleh karena itu, dalam praktiknya, kombinasi dari beberapa metode rekomendasi sering digunakan untuk memberikan rekomendasi yang lebih baik secara keseluruhan. Penerapan algoritma ini memiliki beberapa tahapan yaitu vektorisasi dan _cosine similiarity_. Berikut penerapan tahapannya:
 1. Vektorisasi
-tahap pertama dari modelling yaitu vektorisasi. Vektorisasi adalah proses mengubah teks menjadi representasi vektor numerik, yang dapat diproses oleh algoritma machine learning atau model statistik.
-![tf-idf Formula](https://miro.medium.com/v2/resize:fit:1400/1*LfW66-WsYkFqWc4XYJbEJg.png)
+tahap pertama dari modelling yaitu vektorisasi. Vektorisasi adalah proses mengubah teks menjadi representasi vektor numerik. Dalam NLP, kata-kata atau token dalam teks diubah menjadi vektor numerik, yang dapat digunakan oleh algoritma machine learning untuk mempelajari pola, membuat prediksi, atau melakukan tugas lainnya. Teknik yang digunakan untuk vektorisasi adalah Tf-IDf. Term Frequency-Inverse Document Frequency (TF-IDF) adalah metode vektorisasi teks yang digunakan untuk mengukur seberapa penting suatu kata dalam sebuah dokumen dalam konteks seluruh koleksi dokumen. TF-IDF menghitung dua nilai untuk setiap kata dalam dokumen: frekuensi kemunculan kata tersebut (TF) dan kebalikannya dari frekuensi kemunculan kata tersebut di seluruh dokumen (IDF).
+
+    Kelebihan dari TF-IDF adalah kemampuannya untuk memberikan bobot yang lebih tinggi pada kata-kata yang jarang muncul tetapi muncul dalam dokumen tertentu (tinggi TF dan rendah IDF), sehingga membantu mengidentifikasi kata-kata yang unik atau spesifik untuk dokumen tersebut. TF-IDF juga dapat membantu mengatasi masalah kata-kata umum yang sering muncul di banyak dokumen tetapi tidak memberikan informasi yang signifikan (seperti "the" atau "and").
+    
+    Namun, TF-IDF juga memiliki beberapa kekurangan. Pertama, TF-IDF tidak memperhitungkan urutan kata atau struktur kalimat, sehingga tidak cocok untuk tugas-tugas NLP yang memerlukan pemahaman sintaksis atau semantik yang kompleks. Selain itu, penggunaan TF-IDF dapat menjadi rumit jika dokumen memiliki panjang yang bervariasi atau jika koleksi dokumen sangat besar, karena perhitungan IDF dapat menjadi tidak efisien. berikut adalah formula dari TF-IDF:
+![tf-idf Formula](https://miro.medium.com/v2/resize:fit:1358/1*V9ac4hLVyms79jl65Ym_Bw.jpeg)
 Gambar 9. tf-idf Formula
 2. Cosine Similiarity
 Cosine similarity adalah metrik yang digunakan untuk mengukur seberapa mirip dua vektor non-nol dalam ruang berdimensi banyak. Dalam konteks sistem rekomendasi, cosine similarity sering digunakan untuk membandingkan kesamaan antara dua item atau dua pengguna berdasarkan preferensi mereka terhadap item. Untuk menghitung cosine similarity antara dua vektor, berikut adalah rumus cosine similarity:
@@ -131,7 +136,12 @@ Setelah mendapatkan cosine similarity, berikut adalah sample data hasil cosine s
     | -------- | ---- |----- |------|
     | Ali G Indahouse (2002)  | 0.000000	  |0.000000	|0.410816|
     | Major League: Back to the Minors (1998)   | 0.000000	  |0.000000	|0.410816|
-Model content based filtering dicoba menggunakan Old Boy (2003) sebagai title dengan genre mysteries and thriller, model menghasilkan rekomendasi sebagai berikut:
+Model content based filtering dicoba menggunakan preferensi movie sebagai berikut:
+| Title  | genres |
+| -------| ------ |
+| Old Boy (2003)|Mystery, Thriller|
+Hasilnya, rekomendasi yang dihasilkan sebagai berikut:
+
 | Title  | genres |
 | -------| ------ |
 |The Wailing (2016)|Mystery, Thriller|
@@ -139,9 +149,20 @@ Model content based filtering dicoba menggunakan Old Boy (2003) sebagai title de
 |Body Double (1984)|Mystery, Thriller|
 |Saboteur (1942)|Mystery, Thriller|
 |Pacific Heights (1990)|Mystery, Thriller|
+
 ### Collaborative Filtering
-Terdapat dua jenis collaborative filtering: user-based dan item-based. User-Based Collaborative Filtering mengidentifikasi pengguna yang memiliki preferensi serupa dengan pengguna tertentu dan merekomendasikan item yang disukai oleh pengguna serupa tersebut. Sementara itu, Item-Based Collaborative Filtering mencari item yang memiliki kesamaan dalam preferensi pengguna, misalnya item yang sering disukai oleh pengguna yang sama. Kelebihan dari collaborative filtering termasuk efektif untuk item atau pengguna baru karena dapat memanfaatkan informasi dari pengguna yang sudah ada, dan mampu mengatasi masalah over-specialization dengan memberikan rekomendasi yang lebih beragam. Namun, metode ini juga memiliki kelemahan, seperti kesulitan dalam menangani cold start untuk item atau pengguna baru yang belum memiliki data interaksi yang cukup, serta masalah sparsity dan skala yang timbul ketika jumlah pengguna dan item sangat besar. Kombinasi dengan metode lain seperti content-based filtering sering digunakan untuk meningkatkan kualitas rekomendasi secara keseluruhan. berikut merupakan hasil rekomendasi collaborative filtering:
-|movie with high ratings from user|
+Terdapat dua jenis collaborative filtering: user-based dan item-based. User-Based Collaborative Filtering mengidentifikasi pengguna yang memiliki preferensi serupa dengan pengguna tertentu dan merekomendasikan item yang disukai oleh pengguna serupa tersebut. Sementara itu, Item-Based Collaborative Filtering mencari item yang memiliki kesamaan dalam preferensi pengguna, misalnya item yang sering disukai oleh pengguna yang sama. Kelebihan dari collaborative filtering termasuk efektif untuk item atau pengguna baru karena dapat memanfaatkan informasi dari pengguna yang sudah ada, dan mampu mengatasi masalah over-specialization dengan memberikan rekomendasi yang lebih beragam. Namun, metode ini juga memiliki kelemahan, seperti kesulitan dalam menangani cold start untuk item atau pengguna baru yang belum memiliki data interaksi yang cukup, serta masalah sparsity dan skala yang timbul ketika jumlah pengguna dan item sangat besar. Kombinasi dengan metode lain seperti content-based filtering sering digunakan untuk meningkatkan kualitas rekomendasi secara keseluruhan. Penelitian ini menggunakan pendekatan Deep learning. Pendekatan collaborative filtering dengan deep learning menggabungkan konsep-konsep dari collaborative filtering (CF) dan deep learning untuk meningkatkan kualitas rekomendasi dalam sistem rekomendasi. CF adalah metode yang menggunakan informasi dari pengguna lain untuk membuat rekomendasi, sedangkan deep learning adalah teknik pembelajaran mesin yang menggunakan jaringan saraf tiruan untuk memahami dan mempelajari representasi data yang kompleks.
+
+Dalam konteks rekomendasi, deep learning dapat digunakan untuk memodelkan hubungan yang kompleks antara pengguna, item, dan interaksi mereka. Misalnya, deep learning dapat digunakan untuk mempelajari representasi vektor dari pengguna dan item yang lebih kaya dan informatif, daripada representasi yang dihasilkan secara manual. Hal ini memungkinkan model untuk menangkap pola yang lebih halus dan kompleks dalam data rekomendasi.
+
+Keuntungan pendekatan collaborative filtering dengan deep learning adalah kemampuannya untuk mengatasi beberapa masalah yang dihadapi oleh metode CF tradisional, seperti cold start (ketika ada item baru atau pengguna baru) dan sparsity (ketika hanya sedikit informasi interaksi yang tersedia). Deep learning juga dapat meningkatkan kualitas rekomendasi dengan memanfaatkan informasi yang lebih kaya dari data rekomendasi.
+
+Namun, pendekatan ini juga memiliki beberapa kekurangan. Penggunaan deep learning memerlukan jumlah data yang besar untuk melatih model dengan baik, dan memerlukan komputasi yang lebih intensif dibandingkan dengan metode tradisional. Selain itu, interpretasi model deep learning juga lebih sulit dibandingkan dengan model tradisional, sehingga sulit untuk menjelaskan mengapa model memberikan rekomendasi tertentu kepada pengguna. berikut merupakan hasil rekomendasi collaborative filtering:
+|preferensi user yang digunakan|
+|--------------------------------|
+|userId : 286|
+
+|movie with high ratings from user 286|
 |--------------------------------|
 |GoldenEye (1995) : Action, Adventure, Thriller|
 |Rob Roy (1995) : Action, Drama, Romance, War|
@@ -149,7 +170,7 @@ Terdapat dua jenis collaborative filtering: user-based dan item-based. User-Base
 |Walk in the Clouds, A (1995) : Drama, Romance|
 |I.Q. (1994) : Comedy, Romance|
 
-|Top 10 movie recommendation|
+|Top 10 movie recommendation 286|
 |--------------------------------|
 |Streetcar Named Desire, A (1951) : Drama|
 |Lawrence of Arabia (1962) : Adventure, Drama, War|
@@ -162,7 +183,19 @@ Terdapat dua jenis collaborative filtering: user-based dan item-based. User-Base
 |Band of Brothers (2001) : Action, Drama, War|
 |Three Billboards Outside Ebbing, Missouri (2017) : Crime, Drama|
 ## Evaluation
-setelah modelling dilakukan, selanjutnya adalah evaluation model. pada tahap ini dilakukan evaluasi pada kinerja model menggunakan RMSE.berikut penjelasan dari metriks RMSE:
+setelah modelling dilakukan, selanjutnya adalah evaluation model. pada tahap ini dilakukan evaluasi pada kinerja model menggunakan Precision (Content based filtering) dan RMSE (Collaborative Filtering). berikut evaluation untuk content-based filtering dan collaborative filtering:
+1. Content Based Filtering
+Pada evaluasi content-based filtering menggunakan precision. Precision dalam sistem rekomendasi mengacu pada seberapa akurat sistem tersebut dalam merekomendasikan item yang sesuai dengan preferensi atau minat pengguna. Precision dihitung sebagai rasio antara jumlah item yang relevan yang direkomendasikan oleh sistem dengan jumlah total item yang direkomendasikan. Precision penting dalam sistem rekomendasi karena mengukur seberapa baik sistem dalam memilih item yang benar-benar diminati oleh pengguna. Sebuah sistem yang memiliki precision tinggi akan memberikan rekomendasi yang lebih relevan dan berguna bagi pengguna, sehingga meningkatkan kepuasan pengguna dan efektivitas sistem secara keseluruhan. berikut formula precision pada recommendation system:
+![Precision Formula](https://i.stack.imgur.com/W8rc6.png)
+Gambar 4. Precision Formula
+Hasil dari evaluasi yang telah dilakukan memiliki hasil sebagai berikut:
+$$Precision = {relevantrecommendation \over total recommendation}*100$$
+
+    $$Precision = {5 \over 5}*100$$%
+    $$Precision = 100$$%
+    Berdasarkan  hasil diatas, relevant recommendation values diambil dari genre, jika genre sama dengan preferensi movie, maka dianggap relevant. Hasilnya, terdapat 5 movie genre yang sama dengan preferensi movienya dan total recommendation 5, maka dari itu precision score 100%.
+2. Collaborative Filtering
+pada evaluasi collaborative filtering menggunakan RMSE. berikut penjelasan dari metriks RMSE:
 Root Mean Square Error (RMSE) adalah metrik evaluasi yang umum digunakan untuk mengukur seberapa baik suatu model regresi dapat memprediksi nilai yang sebenarnya. RMSE mengukur seberapa jauh rata-rata prediksi model dari nilai yang diamati. Secara matematis, RMSE didefinisikan sebagai akar kuadrat dari rata-rata dari kuadrat selisih antara nilai prediksi dan nilai aktual. berikut adalah formula RMSE:
 ![RMSE Formula](https://media.geeksforgeeks.org/wp-content/uploads/20200622171741/RMSE1.jpg)
 Gambar 4. RMSE Formula
@@ -170,4 +203,6 @@ Berikut hasil RMSE dari model collaborative filtering:
 ![evaluation RMSE](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/evaluation_rmse.png?raw=true)
 Gambar 5. evaluation RMSE
 
-Berdasarkan gambar 5, menunjukan RMSE pada data test berada dibawah 0.25 sedangkan trainingnya sekitar 0.4.
+    Berdasarkan gambar 5, menunjukan RMSE pada data test berada dibawah 0.25 sedangkan trainingnya sekitar 0.4. RMSE Score yang dekat dengan 16% masih dapat dianggap baik [[2](https://www.semanticscholar.org/paper/Hydrodynamic-and-Sediment-Transport-Simulation-at-Wahyudi-Suntoyo/bf3bab0b16e8aff150bb01068e6c0869b1a229b3)]. Namun, jarak training score dan test score sangat jauh sehingga diindikasikan model overfitting [[3](https://www.semanticscholar.org/paper/An-Overview-of-Overfitting-and-its-Solutions-Ying/75d50a601d4830fae3a24ff55f2795ef3911924e)].
+## Conclussion
+Hasil yang telah dipaparkan menunjukan bahwa content-based filtering memiliki akurasi yang unggul dari collaborative filtering dengan precision 100%, precision score pada recommendation system menunjukan bahwa hasil yang diberikan recommendation system relevant dengan prefensi film yang ditentukan. hal tersebut berhasil menjawab problem statement penelitian ini seperti, Bagaimana membuat sistem rekomendasi yang berdasarkan film yang sedang dilihat? jawabannya menggunakan content-based filtering metode cosine similarity dan Bagaimana perusahaan distributor film dapat merekomendasikan film lain yang mungkin disukai dan belum pernah ditonton oleh pengguna? jawabannya menggunakan collaborative filtering metode deep learning untuk menghasilkan rekomendasi berdasarkan film yang telah diberi rating dan karakteristik filmnya.
