@@ -12,21 +12,30 @@ Penelitian ini difokuskan pada dua permasalahan utama yang dihadapi oleh perusah
 
 Kedua, bagaimana perusahaan distributor film dapat merekomendasikan film lain yang mungkin disukai dan belum pernah ditonton oleh pengguna? Seiring dengan perkembangan teknologi dan platform streaming, penonton memiliki akses yang lebih besar terhadap berbagai pilihan film. Namun, ini juga membuatnya lebih sulit bagi perusahaan distributor film untuk menjangkau penonton potensial yang belum pernah menonton film-film tertentu. Dengan menggunakan sistem rekomendasi yang dipersonalisasi, perusahaan dapat merekomendasikan film-film yang belum pernah ditonton oleh pengguna namun memiliki potensi besar untuk disukai.
 
-Penerapan sistem rekomendasi yang dipersonalisasi dalam industri film dapat memiliki dampak yang signifikan. Pertama, dapat meningkatkan kepuasan pengguna dengan menyajikan film-film yang lebih sesuai dengan preferensi mereka, yang kemudian dapat meningkatkan retensi pengguna dan mengurangi churn rate. Kedua, dapat meningkatkan penjualan perusahaan dengan mendorong penonton untuk menonton film-film baru yang direkomendasikan. Dengan demikian, sistem rekomendasi yang dipersonalisasi dapat menjadi alat yang sangat efektif dalam meningkatkan kinerja dan keberhasilan perusahaan distributor film.
+Penerapan sistem rekomendasi yang dipersonalisasi dalam industri film dapat memiliki dampak yang signifikan pada peningkatan penjualan dan keuntungan perusahaan distributor film. Pertama, dengan menyajikan film-film yang lebih sesuai dengan preferensi pengguna, sistem rekomendasi dapat meningkatkan kemungkinan pengguna untuk menonton film-film baru yang direkomendasikan. Hal ini dapat menghasilkan peningkatan dalam penjualan tiket bioskop, penjualan DVD atau Blu-ray, atau penonton yang menonton film secara digital.
+
+Kedua, sistem rekomendasi dapat membantu dalam meningkatkan keterlibatan pengguna dan retensi pelanggan. Dengan menyajikan rekomendasi yang relevan dan menarik, sistem dapat meningkatkan pengalaman pengguna, membuat mereka lebih cenderung untuk kembali menggunakan layanan perusahaan distributor film. Hal ini dapat mengurangi churn rate, yaitu jumlah pelanggan yang berhenti menggunakan layanan, dan meningkatkan loyalitas pelanggan.
+
+Selain itu, dengan mendorong penonton untuk menonton film-film baru yang direkomendasikan, sistem rekomendasi dapat membantu perusahaan distributor film dalam memperkenalkan dan mempromosikan konten baru. Hal ini dapat membantu dalam meningkatkan popularitas film-film tersebut dan meningkatkan pendapatan perusahaan dari penjualan tiket, lisensi, dan produk-produk terkait film.
+
+Secara keseluruhan, sistem rekomendasi yang dipersonalisasi dapat menjadi alat yang sangat efektif dalam meningkatkan kinerja dan keberhasilan perusahaan distributor film dengan meningkatkan penjualan, mengurangi churn rate, dan meningkatkan pengalaman pengguna.
 
 ### Problem Statements
 
 Rumusan masalah pada penelitian ini sebagai berikut:
 - Bagaimana membuat sistem rekomendasi yang berdasarkan film yang sedang dilihat?
 - Bagaimana perusahaan distributor film dapat merekomendasikan film lain yang mungkin disukai dan belum pernah ditonton oleh pengguna?
+- Bagaimana development content-based filtering model dengan ketepatan tinggi?
+- Bagaimana development collaborative filtering model dengan score tinggi?
 
 ### Goals
 
 Tujuan pada penelitian ini sebagai berikut:
 - Menghasilkan sejumlah rekomendasi berdasarkan film yang sedang dilihat pengguna.
 - Menghasilkan sejumlah rekomendasi film yang sesuai dengan preferensi pengguna dan belum pernah ditonton sebelumnya.
-- Memiliki model RMSE(Root Mean Square Error) pada validation kurang dari 0.25
 - Memiliki Model Precision pada content-based filtering melebihi 90%.
+- Memiliki model RMSE(Root Mean Square Error) pada validation kurang dari 0.25
+
 
 ### Solution statements
 - Penggunaan Content-based Filtering untuk menghasilkan rekomendasi berdasarkan film yang sedang dilihat pengguna
@@ -59,19 +68,19 @@ Ratings dataset merupakan dataset yang berisi user, ratings dan movieId. berikut
 
 Gambar 1. Distribution ratings data
 
-Berdasarkan gambar 1. nilai ratings maksimum pada 4.5 dan minimum 0.5, rating yang diberikan user paling banyak pada 4.0 melebihi 25000 data sedangkan 1, 1.5 dan 0.5 tidak melebihi 5000 data.
+Berdasarkan gambar 1, dapat dilihat bahwa nilai rating berkisar antara 0.5 hingga 4.5. Nilai rating maksimum yang diberikan oleh pengguna adalah 4.5, sedangkan nilai rating minimum adalah 0.5. Secara khusus, terdapat sekitar 25.000 data yang memiliki rating 4.0, menjadikannya rating yang paling banyak diberikan oleh pengguna. Di sisi lain, rating 1.0, 1.5, dan 0.5 memiliki jumlah data yang jauh lebih sedikit, masing-masing tidak melebihi 5.000 data. Hal ini menunjukkan bahwa pengguna cenderung memberikan rating yang lebih tinggi daripada rating yang lebih rendah, dengan rating 4.0 menjadi pilihan yang paling umum.
 
 **Genres**
 ![Distribution genres data](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/distribution%20genre.png?raw=true)
 
 Gambar 2. Distribution genres data
-Berdasarkan gambar 2. Drama memiliki jumlah data paling banyak dari genre lain sedangkan film-noir dan genres lainnya memiliki jumlah data sedikit. Maka dari itu, genre drama menjadi  film paling banyak.
+Berdasarkan gambar 2, dapat dilihat bahwa genre "Drama" memiliki jumlah data yang paling banyak dibandingkan dengan genre lainnya. Di sisi lain, genre "Film-Noir" dan "Genres Lainnya" memiliki jumlah data yang relatif sedikit. Oleh karena itu, dari segi jumlah data, genre "Drama" menjadi genre yang paling banyak muncul dalam dataset ini.
 
 **Years**
 ![Distribution years data](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/distribution%20year.png?raw=true)
 
 Gambar 3. Distribution Years data
-Berdasarkan gambar 3. tahun 2002 memiliki jumlah data paling banyak dari tahun lain sedangkan 1996 tahun lainnya memiliki jumlah data sedikit. Maka dari itu, tahun 2002 menjadi tahun dengan publikasi film paling banyak.
+Berdasarkan gambar 3, terlihat bahwa tahun 2002 memiliki jumlah data yang paling banyak dibandingkan dengan tahun lainnya. Di sisi lain, tahun 1996 dan tahun-tahun lainnya memiliki jumlah data yang relatif sedikit. Oleh karena itu, dari segi jumlah data, tahun 2002 menjadi tahun dengan publikasi film paling banyak dalam dataset ini.
 
 #### Multivariate Analysis
 **Ratings and Genres**
@@ -79,13 +88,17 @@ Berdasarkan gambar 3. tahun 2002 memiliki jumlah data paling banyak dari tahun l
 
 Gambar 4. Count of ratings 5.0 by genre
 
-Berdasarkan gambar 4. Drama memiliki ratings tinggi paling banyak dan adventure memiliki ratings tinggi dengan jumlah dari top 5 lainnya. Maka dari itu, penonton lebih tertarik dengan film dengan genre drama.
+Berdasarkan gambar 4, terlihat bahwa genre "Drama" memiliki jumlah rating tinggi paling banyak dibandingkan dengan genre lainnya. Hal ini menunjukkan bahwa film-film dengan genre "Drama" cenderung mendapatkan respons positif dari penonton dalam bentuk rating yang tinggi. Selain itu, genre "Adventure" memiliki jumlah rating tinggi yang signifikan, terutama jika dijumlahkan dengan jumlah rating tinggi dari lima genre teratas lainnya.
+
+Dari data ini, dapat disimpulkan bahwa penonton cenderung lebih tertarik dengan film-film bergenre "Drama" karena jumlah rating tinggi yang diberikan. Meskipun genre "Adventure" juga memiliki jumlah rating tinggi yang cukup signifikan, genre "Drama" tetap menjadi pilihan utama penonton berdasarkan jumlah rating tinggi yang paling banyak. Hal ini menunjukkan bahwa film-film dengan genre "Drama" memiliki daya tarik yang kuat bagi penonton dan dapat dianggap sebagai genre yang populer dan diminati oleh penonton.
 
 ![Count of ratings 0.5 by genre](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/Count%20of%20rating%20by%20Genre%200.5%20rating.png?raw=true)
 
 Gambar 5. Count of ratings 0.5 by genre
 
-Berdasarkan gambar 5. Comedy memiliki ratings rendah paling banyak dan adventure memiliki ratings rendah dengan jumlah dari top 5 lainnya. Maka dari itu, penonton tidak tertarik dengan film dengan genre comedy.
+Berdasarkan gambar 5, terlihat bahwa genre "Comedy" memiliki jumlah rating rendah paling banyak dibandingkan dengan genre lainnya. Hal ini menunjukkan bahwa film-film dengan genre "Comedy" cenderung mendapatkan respons yang kurang positif dari penonton dalam bentuk rating yang rendah. Selain itu, genre "Adventure" juga memiliki jumlah rating rendah yang signifikan, terutama jika dijumlahkan dengan jumlah rating rendah dari lima genre teratas lainnya.
+
+Dari data ini, dapat disimpulkan bahwa penonton cenderung kurang tertarik dengan film-film bergenre "Comedy" karena jumlah rating rendah yang diberikan. Meskipun genre "Adventure" juga memiliki jumlah rating rendah yang cukup signifikan, genre "Comedy" tetap menjadi salah satu genre yang paling kurang diminati oleh penonton berdasarkan jumlah rating rendah yang paling banyak. Hal ini menunjukkan bahwa film-film dengan genre "Comedy" mungkin memiliki daya tarik yang lebih rendah bagi penonton dan dapat dianggap sebagai genre yang kurang populer atau diminati dibandingkan dengan genre lainnya.
 
 **Ratings and Years**
 ![Count of ratings 5.0 by year](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/Count%20of%20rating%20by%20Year5.0%20rating.png?raw=true)
@@ -104,7 +117,7 @@ Berdasarkan gambar 7. Tahun 2001 memiliki ratings rendah paling banyak dan tahun
 setelah data understanding, selanjutnya data preparation. Pada bagian ini dilakukan beberapa penerapan untuk mempersiapkan data. beberapa tahap seperti merge data dan change data type. berikut penerapannya:
 
 1. Merge Data
-Tahap Pertama yang dilakukan yaitu merge data. Proses penggabungan atau "merge" data dalam tahap persiapan data adalah langkah penting dalam mempersiapkan data untuk analisis lebih lanjut. Dalam konteks pengembangan sistem rekomendasi film, proses ini dapat melibatkan menggabungkan beberapa  data yang berisi informasi tentang pengguna, film, dan rating.  Dengan menggabungkan kedua set data antara movie dan ratings berdasarkan kolom yang sama yaitu movieId, Proses penggabungan data ini dapat dilakukan dengan menggunakan perangkat lunak analisis data seperti Python dengan library pandas, menggunakan fungsi merge untuk menggabungkan data berdasarkan kolom tertentu. Setelah data digabungkan, langkah-langkah selanjutnya dalam analisis data, seperti membangun model rekomendasi berbasis konten menggunakan teknik content-based filtering.
+Tahap Pertama yang dilakukan yaitu merge data. Merge data antara movie dan rating perlu dilakukan dalam analisis data untuk menggabungkan informasi dari kedua dataset tersebut. Data movie menyediakan informasi tentang film-film seperti judul, genre, dan tahun rilis, sementara data rating berisi informasi tentang rating yang diberikan oleh pengguna untuk setiap film. Dengan menggabungkan kedua data ini, analisa bagaimana rating film berkorelasi dengan atribut-atribut film tersebut, seperti genre atau tahun rilis. Selain itu, merge data memungkinkan analisis peringkat film berdasarkan rating yang diberikan oleh pengguna, sehingga dapat memberikan wawasan tentang preferensi pengguna terhadap jenis film tertentu. Merge data juga penting untuk membangun sistem rekomendasi yang lebih baik dengan memperhitungkan preferensi pengguna yang dinyatakan melalui rating yang diberikan. Dengan demikian, merge data antara movie dan rating memungkinkan analisis yang lebih komprehensif tentang preferensi pengguna, peringkat film, dan tren dalam industri film.
 2. Missing Value
 
     ![Missing Value](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/missing_value.png?raw=true)
@@ -113,7 +126,7 @@ Tahap Pertama yang dilakukan yaitu merge data. Proses penggabungan atau "merge" 
     
     Berdasarkan gambar 8. tidak terdapat missing value dari keseluruhan data, maka dari itu dataset siap digunakan untuk development recommendation system.
 3. Change Data Type
-Setelah tahap merge data, selanjutnya tahap change data type. ada 1 feature yang memiliki tipe data ordinal yaitu rating.Perubahan tipe data dari "object" ke "category" adalah proses yang melibatkan konversi nilai-nilai kategori dalam kolom menjadi nilai numerik yang mewakili tingkat ordinal.Feature rating merupakan data kategori yang memiliki tingkatan atau urutan tertentu yang dapat diurutkan, maka dari itu perlu dilakukan perubahan tipe menjadi category.
+Setelah tahap merge data, selanjutnya tahap change data type. ada 1 feature yang memiliki tipe data ordinal yaitu rating.Perubahan tipe data dari "object" ke "category" adalah proses yang melibatkan konversi nilai-nilai kategori dalam kolom menjadi nilai numerik yang mewakili tingkat ordinal. Perubahan tipe data dari object ke category perlu dilakukan untuk mengoptimalkan penggunaan memori dan meningkatkan performa analisis data. Tipe data category lebih efisien dalam penggunaan memori karena menggunakan pendekatan pengkodean kategori yang menggantikan nilai unik dengan bilangan bulat yang lebih kecil daripada representasi string atau objek. Selain itu, penggunaan tipe data category juga dapat meningkatkan performa operasi pada kolom tersebut, seperti pengurutan atau pengelompokan data, karena data yang direpresentasikan dalam bentuk kategori lebih mudah untuk diurutkan dan dikelompokkan. Selain efisiensi memori dan performa, menggunakan tipe data category juga mempermudah analisis data yang melibatkan kategori dengan memanfaatkan fitur-fitur khusus untuk kategori, seperti menetapkan urutan kategori atau memberi label kategori secara eksplisit. Namun, perlu diingat bahwa penggunaan tipe data category juga dapat menambah kompleksitas kode, terutama dalam pengkodean ulang kembali ke nilai asli jika diperlukan. Oleh karena itu, pemilihan tipe data haruslah dilakukan dengan seimbang antara efisiensi memori, performa analisis, dan kompleksitas kode yang dihasilkan.
 
 ## Modeling
 Setelah tahap Data Preparation, selanjutnya tahap modelling. Modelling memiliki 2 tahap yaitu collaborative filtering dan content based filtering. Content-Based Filtering adalah teknik dalam sistem rekomendasi yang menggunakan karakteristik atau konten dari item untuk merekomendasikan item yang serupa kepada pengguna. Collaborative Filtering adalah teknik dalam sistem rekomendasi yang menggunakan informasi dari sejumlah besar pengguna dan interaksi mereka dengan item untuk membuat rekomendasi. berikut merupakan penerapan algoritma recommendation:
@@ -128,7 +141,7 @@ tahap pertama dari modelling yaitu vektorisasi. Vektorisasi adalah proses mengub
 ![tf-idf Formula](https://miro.medium.com/v2/resize:fit:1358/1*V9ac4hLVyms79jl65Ym_Bw.jpeg)
 Gambar 9. tf-idf Formula
 2. Cosine Similiarity
-Cosine similarity adalah metrik yang digunakan untuk mengukur seberapa mirip dua vektor non-nol dalam ruang berdimensi banyak. Dalam konteks sistem rekomendasi, cosine similarity sering digunakan untuk membandingkan kesamaan antara dua item atau dua pengguna berdasarkan preferensi mereka terhadap item. Untuk menghitung cosine similarity antara dua vektor, berikut adalah rumus cosine similarity:
+Cosine similarity adalah metrik yang digunakan untuk mengukur seberapa mirip dua vektor non-nol dalam ruang berdimensi banyak. Cosine similarity memiliki beberapa kelebihan yang membuatnya menjadi metode yang populer dalam analisis data. Pertama, cosine similarity mudah diinterpretasikan, karena hasilnya berkisar antara -1 hingga 1, di mana nilai yang lebih tinggi menunjukkan kedua vektor yang lebih mirip. Selain itu, cosine similarity tidak dipengaruhi oleh magnitudo dari vektor, hanya arahnya yang penting, sehingga cocok untuk data di mana magnitudo tidak relevan. Metode ini juga efisien secara komputasi, terutama untuk data dengan dimensi yang tinggi, dan bekerja dengan baik untuk data yang memiliki banyak nilai nol (sparse), seperti data teks. Namun, cosine similarity juga memiliki beberapa kekurangan. Pertama, metode ini tidak sensitif terhadap perbedaan bobot antar fitur, sehingga tidak cocok jika bobot-fitur tersebut penting dalam perbandingan. Selain itu, cosine similarity mengasumsikan hubungan linier antara fitur, sehingga tidak cocok untuk data yang memiliki hubungan non-linear. Metode ini juga tidak memperhitungkan hubungan antar fitur dalam vektor, hanya memperhatikan arah vektor, dan sensitif terhadap perbedaan panjang vektor, yang dapat menghasilkan hasil yang tidak akurat jika panjang vektor sangat berbeda. Meskipun memiliki kekurangan, cosine similarity tetap menjadi pilihan yang populer dalam banyak aplikasi karena kesederhanaannya dan kemampuannya untuk mengatasi masalah sparsity dalam data.Dalam konteks sistem rekomendasi, cosine similarity sering digunakan untuk membandingkan kesamaan antara dua item atau dua pengguna berdasarkan preferensi mereka terhadap item. Untuk menghitung cosine similarity antara dua vektor, berikut adalah rumus cosine similarity:
 ![Cosine Similarity Formula](https://miro.medium.com/v2/resize:fit:1400/1*LfW66-WsYkFqWc4XYJbEJg.png)
 Gambar 10. Cosine Similarity Formula
 Setelah mendapatkan cosine similarity, berikut adalah sample data hasil cosine similarity.
@@ -201,8 +214,8 @@ Root Mean Square Error (RMSE) adalah metrik evaluasi yang umum digunakan untuk m
 Gambar 4. RMSE Formula
 Berikut hasil RMSE dari model collaborative filtering:
 ![evaluation RMSE](https://github.com/muhammadarl/film-recommendation-system/blob/main/img/evaluation_rmse.png?raw=true)
-Gambar 5. evaluation RMSE
+Gambar 11. evaluation RMSE
 
-    Berdasarkan gambar 5, menunjukan RMSE pada data test berada dibawah 0.25 sedangkan trainingnya sekitar 0.4. RMSE Score yang dekat dengan 16% masih dapat dianggap baik [[2](https://www.semanticscholar.org/paper/Hydrodynamic-and-Sediment-Transport-Simulation-at-Wahyudi-Suntoyo/bf3bab0b16e8aff150bb01068e6c0869b1a229b3)]. Namun, jarak training score dan test score sangat jauh sehingga diindikasikan model overfitting [[3](https://www.semanticscholar.org/paper/An-Overview-of-Overfitting-and-its-Solutions-Ying/75d50a601d4830fae3a24ff55f2795ef3911924e)].
+    Berdasarkan gambar 11, menunjukan RMSE pada data test berada dibawah 0.2 sedangkan trainingnya sekitar 0.25. RMSE Score yang dekat dengan 16% masih dapat dianggap baik [[2](https://www.semanticscholar.org/paper/Hydrodynamic-and-Sediment-Transport-Simulation-at-Wahyudi-Suntoyo/bf3bab0b16e8aff150bb01068e6c0869b1a229b3)]. Jarak training score dan test score tidak terlalu jauh sehingga diindikasikan model tidak overfitting [[3](https://www.semanticscholar.org/paper/An-Overview-of-Overfitting-and-its-Solutions-Ying/75d50a601d4830fae3a24ff55f2795ef3911924e)]. Overfitting pada sistem rekomendasi dapat terjadi karena keterbatasan data, fitur-fitur yang terlalu kompleks, atau model yang terlalu besar. Kurangnya regularisasi dan penggunaan metrik evaluasi yang tidak tepat juga dapat menyebabkan overfitting. Untuk mengatasi masalah ini, penting untuk menggunakan teknik-teknik seperti validasi silang, regularisasi, dan pemantauan kinerja model dengan cermat.
 ## Conclussion
-Hasil yang telah dipaparkan menunjukan bahwa content-based filtering memiliki akurasi yang unggul dari collaborative filtering dengan precision 100%, precision score pada recommendation system menunjukan bahwa hasil yang diberikan recommendation system relevant dengan prefensi film yang ditentukan. hal tersebut berhasil menjawab problem statement penelitian ini seperti, Bagaimana membuat sistem rekomendasi yang berdasarkan film yang sedang dilihat? jawabannya menggunakan content-based filtering metode cosine similarity dan Bagaimana perusahaan distributor film dapat merekomendasikan film lain yang mungkin disukai dan belum pernah ditonton oleh pengguna? jawabannya menggunakan collaborative filtering metode deep learning untuk menghasilkan rekomendasi berdasarkan film yang telah diberi rating dan karakteristik filmnya.
+Hasil yang telah dipaparkan menunjukan bahwa content-based filtering memiliki akurasi yang unggul dari collaborative filtering dengan precision 100%, precision score pada recommendation system menunjukan bahwa hasil yang diberikan recommendation system relevant dengan prefensi film yang ditentukan. hal tersebut berhasil menjawab problem statement penelitian ini seperti, Bagaimana membuat sistem rekomendasi yang berdasarkan film yang sedang dilihat? jawabannya menggunakan content-based filtering metode cosine similarity dan Bagaimana perusahaan distributor film dapat merekomendasikan film lain yang mungkin disukai dan belum pernah ditonton oleh pengguna? jawabannya menggunakan collaborative filtering metode deep learning untuk menghasilkan rekomendasi berdasarkan film yang telah diberi rating dan karakteristik filmnya. Bagaimana development content-based filtering model dengan ketepatan tinggi? menggunakan metode cosine similarity dan genres sebagai preferensi. Hasilnya precision 100% menunjukan bahwa model memberikan rekomendasi yang tepat. Bagaimana development collaborative filtering model dengan score tinggi? menggunakan metode deep learning dan metriks RMSE sebagai penilaian. Hasilnya, training RMSE 0.18 dan Test(validation) RMSE 0.25 perbedaan yang tidak terlalu jauh menunjukan bahwa model tidak overfitting dan RMSE score termasuk unggul.
