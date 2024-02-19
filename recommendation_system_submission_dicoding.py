@@ -43,12 +43,16 @@ ratings_df.head()
 print('Jumlah data movies: ', len(movies_df.movieId.unique()))
 print('Jumlah data ratings: ', len(ratings_df.movieId.unique()))
 
+#get dataset info movies_df
 movies_df.info()
 
+#get dataset info ratings_df
 ratings_df.info()
 
+#get summary from movies_df
 movies_df.describe(include="all")
 
+#get summary from ratings_df
 ratings_df.describe(include="all")
 
 """### Exploratory Data Analysis
@@ -56,6 +60,7 @@ ratings_df.describe(include="all")
 **Univariate Analysis**
 """
 
+#plotting rating distribution data
 categorical_feats = ['rating']
 count_categorical_cols = len(categorical_feats)
 num_rows = (count_categorical_cols + 1) // 2  # Calculate the number of rows needed for the grid layout
@@ -78,6 +83,7 @@ for ax in axes[count_categorical_cols:]:
 plt.tight_layout()
 plt.show()
 
+#separate genres by "|"
 movie_id = []
 movies = []
 genres = []
@@ -95,15 +101,18 @@ genres = {
     "genre":genres
 }
 
+#make df from genres dict
 genres_df = pd.DataFrame(genres)
 genres_df.head()
 
+#plotting distribution genre
 genres_df["genre"].value_counts().plot(kind="bar")
 plt.xlabel("Genre")
 plt.ylabel("Count")
 plt.title("Distribution of Genres")
 plt.show()
 
+#separate year from movie title
 movie_id = []
 movies = []
 years=[]
@@ -125,9 +134,11 @@ years_df = {
     "year":years
 }
 
+#make df from years_df
 years_df = pd.DataFrame(years_df)
 years_df.head()
 
+# plotting distribusion year
 years_df["year"].value_counts().head(10).plot(kind="bar")
 plt.xlabel("year")
 plt.ylabel("Count")
@@ -257,6 +268,7 @@ print('Jumlah seluruh data movies dan rating berdasarkan movie_id: ', len(movies
 
 """### Missing Value"""
 
+#menghitung jumlah missing value
 movies.isna().sum().plot(kind="bar")
 plt.title("Count of missing value")
 
@@ -375,16 +387,19 @@ def movie_recommendation(title, similarity_data=cosine_sim_df, items=data[['titl
 
     return pd.DataFrame(closest).merge(items).head(k)
 
+#mencari data dengan judul sama
 data[data.title.eq('Old Boy (2003)')]
 actual = data[data.title.eq('Old Boy (2003)')]
 
 # Mendapatkan rekomendasi movie yang mirip dengan Old Boy (2003)
 movie_recommendation('Old Boy (2003)')
 
+# Mendapatkan rekomendasi movie yang mirip dengan Old Boy (2003) untuk perhitungan precision
 predict = movie_recommendation('Old Boy (2003)')
 
 actual["genres"].values
 
+#formula precision recommendation system
 total_relevant = predict[predict["genres"].isin(actual["genres"].values)]["genres"].value_counts().values[0]
 total_recommendation = len(predict)
 precision = (total_relevant/total_recommendation)*100
@@ -520,6 +535,7 @@ history = model.fit(
 ### Recommendation Score
 """
 
+#plotting result of training and validation
 plt.plot(history.history['root_mean_squared_error'])
 plt.plot(history.history['val_root_mean_squared_error'])
 plt.title('model_metrics')
