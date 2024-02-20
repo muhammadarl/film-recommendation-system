@@ -33,8 +33,8 @@ Rumusan masalah pada penelitian ini sebagai berikut:
 Tujuan pada penelitian ini sebagai berikut:
 - Menghasilkan sejumlah rekomendasi berdasarkan film yang sedang dilihat pengguna.
 - Menghasilkan sejumlah rekomendasi film yang sesuai dengan preferensi pengguna dan belum pernah ditonton sebelumnya.
-- Memiliki Model Precision pada content-based filtering melebihi 90%.
-- Memiliki model RMSE(Root Mean Square Error) pada validation kurang dari 0.25
+- Memiliki hasil Precision pada content-based filtering melebihi 90%.
+- Memiliki hasil RMSE(Root Mean Square Error) pada validation kurang dari 0.25
 
 
 ### Solution statements
@@ -51,8 +51,10 @@ Movies dataset merupakan dataset yang berisi judul film dan genre. berikut struk
     | movieId  | int  | 9742  |
     | title  | object  | 9742  |
      | genres  | object  | 9742  |
+   
+     Tabel 1. Summary Movies Dataset
      
-2. Ratings
+3. Ratings
 Ratings dataset merupakan dataset yang berisi user, ratings dan movieId. berikut struktur dari Ratings dataset
     | Feature  | type | Row |
     | ------------- | ------------- |------------- |
@@ -60,6 +62,8 @@ Ratings dataset merupakan dataset yang berisi user, ratings dan movieId. berikut
     | userId  | int  | 100836  |
      | rating  | float  | 100836  |
      | timestamp  | int  | 100836  |
+   
+    Tabel 2. Summary Ratings Dataset
 ### Exploratory Data Analysis
 
 #### Univariate Analysis
@@ -149,10 +153,15 @@ Setelah mendapatkan cosine similarity, berikut adalah sample data hasil cosine s
     | -------- | ---- |----- |------|
     | Ali G Indahouse (2002)  | 0.000000	  |0.000000	|0.410816|
     | Major League: Back to the Minors (1998)   | 0.000000	  |0.000000	|0.410816|
+   
+    Tabel 3. Sample Data hasil COsine Similarity
+
 Model content based filtering dicoba menggunakan preferensi movie sebagai berikut:
 | Title  | genres |
 | -------| ------ |
 | Old Boy (2003)|Mystery, Thriller|
+
+Tabel 4. Sample Data sebagai percobaan content-based filtering
 Hasilnya, rekomendasi yang dihasilkan sebagai berikut:
 
 | Title  | genres |
@@ -162,6 +171,8 @@ Hasilnya, rekomendasi yang dihasilkan sebagai berikut:
 |Body Double (1984)|Mystery, Thriller|
 |Saboteur (1942)|Mystery, Thriller|
 |Pacific Heights (1990)|Mystery, Thriller|
+
+Tabel 5. Hasil Content-based filtering
 
 ### Collaborative Filtering
 Terdapat dua jenis collaborative filtering: user-based dan item-based. User-Based Collaborative Filtering mengidentifikasi pengguna yang memiliki preferensi serupa dengan pengguna tertentu dan merekomendasikan item yang disukai oleh pengguna serupa tersebut. Sementara itu, Item-Based Collaborative Filtering mencari item yang memiliki kesamaan dalam preferensi pengguna, misalnya item yang sering disukai oleh pengguna yang sama. Kelebihan dari collaborative filtering termasuk efektif untuk item atau pengguna baru karena dapat memanfaatkan informasi dari pengguna yang sudah ada, dan mampu mengatasi masalah over-specialization dengan memberikan rekomendasi yang lebih beragam. Namun, metode ini juga memiliki kelemahan, seperti kesulitan dalam menangani cold start untuk item atau pengguna baru yang belum memiliki data interaksi yang cukup, serta masalah sparsity dan skala yang timbul ketika jumlah pengguna dan item sangat besar. Kombinasi dengan metode lain seperti content-based filtering sering digunakan untuk meningkatkan kualitas rekomendasi secara keseluruhan. Penelitian ini menggunakan pendekatan Deep learning. Pendekatan collaborative filtering dengan deep learning menggabungkan konsep-konsep dari collaborative filtering (CF) dan deep learning untuk meningkatkan kualitas rekomendasi dalam sistem rekomendasi. CF adalah metode yang menggunakan informasi dari pengguna lain untuk membuat rekomendasi, sedangkan deep learning adalah teknik pembelajaran mesin yang menggunakan jaringan saraf tiruan untuk memahami dan mempelajari representasi data yang kompleks.
@@ -175,6 +186,8 @@ Namun, pendekatan ini juga memiliki beberapa kekurangan. Penggunaan deep learnin
 |--------------------------------|
 |userId : 286|
 
+Tabel 6. Preferensi User Collaborative Filtering
+
 |movie with high ratings from user 286|
 |--------------------------------|
 |GoldenEye (1995) : Action, Adventure, Thriller|
@@ -182,6 +195,8 @@ Namun, pendekatan ini juga memiliki beberapa kekurangan. Penggunaan deep learnin
 |Something to Talk About (1995) : Comedy, Drama, Romance|
 |Walk in the Clouds, A (1995) : Drama, Romance|
 |I.Q. (1994) : Comedy, Romance|
+
+Tabel 7. Hasil Collaborative Filtering(Movie with high ratings)
 
 |Top 10 movie recommendation 286|
 |--------------------------------|
@@ -195,6 +210,9 @@ Namun, pendekatan ini juga memiliki beberapa kekurangan. Penggunaan deep learnin
 |Captain Fantastic (2016) : Drama|
 |Band of Brothers (2001) : Action, Drama, War|
 |Three Billboards Outside Ebbing, Missouri (2017) : Crime, Drama|
+
+Tabel 8. Hasil Collaborative Filtering(Movie recommendation)
+
 ## Evaluation
 setelah modelling dilakukan, selanjutnya adalah evaluation model. pada tahap ini dilakukan evaluasi pada kinerja model menggunakan Precision (Content based filtering) dan RMSE (Collaborative Filtering). berikut evaluation untuk content-based filtering dan collaborative filtering:
 1. Content Based Filtering
